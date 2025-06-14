@@ -1,26 +1,6 @@
-from flask import Flask, render_template
 import sqlite3
-import os
-
-app = Flask(__name__)
 
 DB_PATH = 'rotary.db'
-
-def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS content (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        url TEXT,
-        source TEXT,
-        content TEXT,
-        is_opportunity INTEGER,
-        raw_content TEXT,
-        gpt_suggestion TEXT
-    )''')
-    conn.commit()
-    conn.close()
 
 def insert_article(title, url, source, content, raw_content=None, gpt_suggestion=None):
     conn = sqlite3.connect(DB_PATH)
@@ -47,19 +27,3 @@ def update_analysis(article_id, is_opportunity, gpt_suggestion):
               (is_opportunity, gpt_suggestion, article_id))
     conn.commit()
     conn.close()
-
-def get_opportunities():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    rows = c.execute("SELECT * FROM content").fetchall()
-    columns = [desc[0] for desc in c.description]
-    conn.close()
-    return [dict(zip(columns, row)) for row in rows]
-
-@app.route("/")
-def index():
-    rows = get_opportunities()
-    return render_template("index.html", rows=rows)
-
-if __name__ == "__main__":
-    app.run(debug=True)
