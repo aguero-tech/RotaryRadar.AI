@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opportunities</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .opportunity {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .label {
+            font-weight: bold;
+            display: inline-block;
+            width: 100px;
+        }
+
+        .gpt_suggestion {
+            margin-top: 16px;
+            padding: 12px;
+            background-color: #fff;
+            border-left: 4px solid #0077b6;
+        }
+
+        .field {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Opportunities</h1>
+
+    {% for row in rows %}
+        <div class="opportunity">
+            {% for col, value in row.items() %}
+                {% if col not in ['content', 'is_opportunity', 'gpt_suggestion', 'raw_content', 'suggested_action', 'gpt_suggestion_html'] %}
+                    <div class="field">
+                        <span class="label">{{ col|capitalize }}:</span> {{ value }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            {% if row.get('gpt_suggestion_html') %}
+                <div class="gpt_suggestion">
+                    {{ row['gpt_suggestion_html'] | safe }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</body>
+</html>
