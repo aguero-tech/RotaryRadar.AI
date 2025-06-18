@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opportunities</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; }
+        th { background: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Opportunities</h1>
+    <table>
+        <thead>
+            <tr>
+                {% for col in rows[0].keys() %}
+                    {% if col not in ['content', 'is_opportunity', 'gpt_suggestion', 'raw_content', 'suggested_action'] %}
+                        <th>{{ col }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    {% for col, value in row.items() %}
+                        {% if col not in ['content', 'is_opportunity', 'gpt_suggestion', 'raw_content', 'suggested_action'] %}
+                            <td>
+                                {% if col == 'gpt_suggestion_html' %}
+                                    {{ value|safe }}
+                                {% else %}
+                                    {{ value }}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
