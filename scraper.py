@@ -10,13 +10,13 @@ import yaml
 
 #to use OpenAI's GPT-4.1 model for analysis; prompt engineering to get relevant suggestions
 def analyze_with_gpt(content):
-    prompt = f"Please review the following recent news from Gurnee, Waukegan, and Lake County, IL. Based on current events and community needs, identify and recommend at least two Rotary service or fundraising opportunities that align with Rotary’s areas of focus (e.g., community health, environment, education, youth). Provide context, potential partners, and next steps.:\n\n{content}"
+    prompt = f"Please review the following recent news from Gurnee, Waukegan, and Lake County, IL. Based on current events and community needs, identify and recommend at least two Rotary service or fundraising opportunities that align with Rotary’s areas of focus (e.g., community health, environment, education, youth). Provide context, potential partners, and next steps. Do not include any sections titled "Other Relevant Opportunities," "Optional Bonus," or "Summary Table." Only provide the two main project ideas with their context, partners, and next steps. Do not add any tables or additional opportunity lists.:\n\n{content}"
     try:
         client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
             model="gpt-4.1",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=1000
+            max_tokens=1250
         )
         return response.choices[0].message.content.strip()
     except Exception as e:

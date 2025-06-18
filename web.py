@@ -66,5 +66,13 @@ def index():
             article['gpt_suggestion_html'] = markdown.markdown(article['gpt_suggestion'])
     return render_template("index.html", rows=articles)
 
+@app.route("/summary")
+def summary():
+    articles = get_opportunities()
+    for article in articles:
+        if 'gpt_suggestion' in article:
+            article['gpt_suggestion_html'] = markdown.markdown(article['gpt_suggestion'])
+    return render_template("summary.html", rows=articles)
+
 if __name__ == "__main__": 
     app.run(debug=True)

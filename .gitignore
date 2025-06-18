@@ -17,7 +17,33 @@ opportunities.csv
 # VS Code settings
 .vscode/
 
+# OS files# Created by venv; see https://docs.python.org/3/library/venv.html
+# Byte-compiled / optimized / DLL files
+__pycache__/
+app/__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+
+# SQLite database
+*.db
+
+# Results and CSV exports (optional, remove if you want to track these)
+app/results/
+opportunities.csv
+
+# VS Code settings
+.vscode/
+
 # OS files
+.DS_Store
+Thumbs.db
+
+# Python virtual environments
+venv/
+.env/
 .DS_Store
 Thumbs.db
 
