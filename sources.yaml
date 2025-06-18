@@ -20,7 +20,5 @@ full_story_depth1: #control with urls get "depth1" parsing via YAML
 
 
 
-
-
 #rss_feeds: in progress
 #  - "https://patch.com/rss.xml"
