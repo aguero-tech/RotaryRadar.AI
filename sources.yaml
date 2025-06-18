@@ -1,4 +1,26 @@
 urls:
+#daily herald
   - "https://www.dailyherald.com/archive/20250618/"
+
+
+#chicago tribune - lake county
   - "https://www.chicagotribune.com/lake-county-news-sun/"
   - "https://www.chicagotribune.com/suburbs/lake-county"
+
+
+#patch - grayslake
+  - "https://patch.com/illinois/grayslake"
+  - "https://patch.com/illinois/grayslake/calendar"
+  - "https://patch.com/illinois/lakeforest"
+  - "https://patch.com/illinois/libertyville"
+
+full_story_depth1: #control with urls get "depth1" parsing via YAML
+# gurnee city hall
+  - "https://www.gurnee.il.us/news"
+
+
+
+
+
+#rss_feeds: in progress
+#  - "https://patch.com/rss.xml"
