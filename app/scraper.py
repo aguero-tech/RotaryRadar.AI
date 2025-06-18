@@ -10,7 +10,7 @@ import yaml
 
 #to use OpenAI's GPT-4.1 model for analysis; prompt engineering to get relevant suggestions
 def analyze_with_gpt(content):
-    prompt = f"Please review the following recent news from Gurnee, Waukegan, and Lake County, IL. Based on current events and community needs, identify and recommend at least three Rotary service or fundraising opportunities that align with Rotary’s areas of focus (e.g., community health, environment, education, youth). Provide context, potential partners, and next steps.:\n\n{content}"
+    prompt = f"Please review the following recent news from Gurnee, Waukegan, and Lake County, IL. Based on current events and community needs, identify and recommend at least two Rotary service or fundraising opportunities that align with Rotary’s areas of focus (e.g., community health, environment, education, youth). Provide context, potential partners, and next steps.:\n\n{content}"
     try:
         client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
