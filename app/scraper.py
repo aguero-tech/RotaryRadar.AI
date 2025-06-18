@@ -8,6 +8,7 @@ import time
 import openai
 import yaml
 import feedparser
+from app.day_url_limit import filter_urls_last_7_days  # adjust import as needed
 
 #to use OpenAI's GPT-4.1 model for analysis; prompt engineering to get relevant suggestions
 def analyze_with_gpt(content):
@@ -17,7 +18,7 @@ def analyze_with_gpt(content):
         response = client.chat.completions.create(
             model="gpt-4.1",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=500
+            max_tokens=1250
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
@@ -60,6 +61,10 @@ def scrape_depth1(driver, url):
     # Find all "Full Story" links
     full_story_links = driver.find_elements(By.LINK_TEXT, "Full Story")
     links = [link.get_attribute('href') for link in full_story_links]
+
+    # Filter links to only those within the last 7 days
+    links = filter_urls_last_7_days(links)
+    print(f"Found {len(links)} 'Full Story' links from the last 7 days.")
 
     for link in links:
         try:

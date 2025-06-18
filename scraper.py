@@ -16,7 +16,7 @@ def analyze_with_gpt(content):
         response = client.chat.completions.create(
             model="gpt-4.1",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=1000
+            max_tokens=1250
         )
         return response.choices[0].message.content.strip()
     except Exception as e:

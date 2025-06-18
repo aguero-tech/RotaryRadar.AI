@@ -1,0 +1,7 @@
+flask
+selenium
+beautifulsoup4
+openai
+pyyaml
+feedparser
+markdown
