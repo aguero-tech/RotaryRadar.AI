@@ -6,43 +6,31 @@ from .db import insert_article
 import os
 import time
 import openai
+import yaml
 
+#to use OpenAI's GPT-4.1 model for analysis; prompt engineering to get relevant suggestions
 def analyze_with_gpt(content):
-    """
-    Uses OpenAI's GPT model to analyze news content and suggest a Rotary opportunity.
-    Returns the suggestion as a string, or an error message if the API call fails.
-    """
-    prompt = f"Analyze this news content and suggest a Rotary opportunity:\n\n{content}"
+    prompt = f"Please review the following recent news from Gurnee, Waukegan, and Lake County, IL. Based on current events and community needs, identify and recommend at least two Rotary service or fundraising opportunities that align with Rotary’s areas of focus (e.g., community health, environment, education, youth). Provide context, potential partners, and next steps.:\n\n{content}"
     try:
-        # Create OpenAI client using API key from environment variable
         client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4.1",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=100
+            max_tokens=1000
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
         print(f"OpenAI API error: {e}")
         return "GPT analysis failed."
 
-def scrape_sources():
-    """
-    Scrapes a list of Daily Herald archive URLs using Selenium and BeautifulSoup.
-    For each page:
-      - Extracts the page title and text content.
-      - Analyzes the content with GPT for Rotary opportunities.
-      - Saves the result to the database.
-    """
-    urls = [
-        "https://www.dailyherald.com/archive/20250614/",
-        "https://www.dailyherald.com/archive/20250613/",
-        "https://www.dailyherald.com/archive/20250612/",
-        "https://www.dailyherald.com/archive/20250611/",
-        "https://www.dailyherald.com/archive/20250610/",
-    ]
+def load_urls(yaml_path="sources.yaml"):
+    with open(yaml_path, "r") as f:
+        data = yaml.safe_load(f)
+    return data.get("urls", [])
 
-    # Set up Chrome options for headless browsing
+def scrape_sources():
+    urls = load_urls()
+
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
@@ -50,23 +38,18 @@ def scrape_sources():
     driver = webdriver.Chrome(options=chrome_options)
 
     for url in urls:
-        print(f"Scraping {url} with Selenium...")
+        print(f"Scraping {url} for current articles...")
         try:
-            # Load the page
             driver.get(url)
-            time.sleep(3)  # Wait for page to load
-
-            # Parse the page source with BeautifulSoup
+            time.sleep(3)
             soup = BeautifulSoup(driver.page_source, "html.parser")
-            content = soup.get_text(separator='\n', strip=True)  # Extract all text
-            raw_content = driver.page_source  # Save raw HTML
+            content = soup.get_text(separator='\n', strip=True)
+            raw_content = driver.page_source
             title = soup.title.string if soup.title else "No Title"
-            print(f"Title: {title}\nContent: {content[:1000]}...\n")  # Print preview
+            print(f"Title: {title}\nContent: {content[:250]}...\n")
 
-            # Analyze content with GPT
             gpt_suggestion = analyze_with_gpt(content)
 
-            # Prepare data for database insertion
             dummy_data = {
                 'title': title,
                 'url': url,
@@ -76,7 +59,6 @@ def scrape_sources():
                 'gpt_suggestion': gpt_suggestion
             }
             try:
-                # Insert the article into the database
                 insert_article(**dummy_data)
             except Exception as db_err:
                 print(f"Database insert failed for {url}: {db_err}")
@@ -84,4 +66,4 @@ def scrape_sources():
         except Exception as e:
             print(f"Selenium/BeautifulSoup failed for {url}: {e}")
 
-    driver.quit()  # Close the browser when done
+    driver.quit()

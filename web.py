@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import sqlite3
 import os
+import markdown
 
 app = Flask(__name__)
 
@@ -56,10 +57,14 @@ def get_opportunities():
     conn.close()
     return [dict(zip(columns, row)) for row in rows]
 
+
 @app.route("/")
 def index():
-    rows = get_opportunities()
-    return render_template("index.html", rows=rows)
+    articles = get_opportunities()
+    for article in articles:
+        if 'gpt_suggestion' in article:
+            article['gpt_suggestion_html'] = markdown.markdown(article['gpt_suggestion'])
+    return render_template("index.html", rows=articles)
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     app.run(debug=True)

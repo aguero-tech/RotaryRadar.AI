@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 {% for col in rows[0].keys() %}
-                    {% if col != 'raw_content' and col != 'suggested_action' %}
+                    {% if col not in ['content', 'is_opportunity', 'gpt_suggestion', 'raw_content', 'suggested_action'] %}
                         <th>{{ col }}</th>
                     {% endif %}
                 {% endfor %}
@@ -22,13 +22,19 @@
         </thead>
         <tbody>
             {% for row in rows %}
-            <tr>
-                {% for col, value in row.items() %}
-                    {% if col != 'raw_content' and col != 'suggested_action' %}
-                        <td>{{ value }}</td>
-                    {% endif %}
-                {% endfor %}
-            </tr>
+                <tr>
+                    {% for col, value in row.items() %}
+                        {% if col not in ['content', 'is_opportunity', 'gpt_suggestion', 'raw_content', 'suggested_action'] %}
+                            <td>
+                                {% if col == 'gpt_suggestion_html' %}
+                                    {{ value|safe }}
+                                {% else %}
+                                    {{ value }}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
             {% endfor %}
         </tbody>
     </table>

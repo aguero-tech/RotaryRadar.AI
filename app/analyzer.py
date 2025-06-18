@@ -1,7 +1,8 @@
 from .db import get_unanalyzed_articles, update_analysis
 
+# running analysis on all unanalyzed articles
 def analyze_all():
-    print("Analyzing articles...")
+    print("Analyzing articles for volunteering opportunities #serviceaboveself...")
     for article in get_unanalyzed_articles():
         suggestion = article.get('gpt_suggestion')
         if suggestion and suggestion != "GPT analysis failed.":
