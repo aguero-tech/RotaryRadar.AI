@@ -2,7 +2,7 @@ import boto3
 from datetime import datetime
 import os
 
-BUCKET_NAME = 'gurnee-rotary'
+BUCKET_NAME = 'rotaryradar-gurnee.aguero.tech'  # Updated bucket name
 EXPORT_DIR = 'exports'
 
 def upload_to_s3():

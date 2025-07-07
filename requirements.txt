@@ -6,3 +6,4 @@ pyyaml
 feedparser
 markdown
 boto3
+python-dotenv

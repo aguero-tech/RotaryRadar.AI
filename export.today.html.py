@@ -7,6 +7,7 @@ import os
 DB_PATH = 'rotary.db'
 TEMPLATE_PATH = 'templates'
 TEMPLATE_FILE = 'summary.html'
+INDEX_TEMPLATE_FILE = 'index.html'
 EXPORT_DIR = 'exports'
 
 def export_today_summary():
@@ -40,16 +41,15 @@ def export_today_summary():
 
 def generate_index_html(directory=EXPORT_DIR):
     files = sorted(
-        f for f in os.listdir(directory)
-        if f.endswith('.html') and f != 'index.html' and f != 'weekly_impact_summary.html'
+        (f for f in os.listdir(directory)
+         if f.endswith('.html') and f != 'index.html' and f != 'weekly_impact_summary.html'),
+        reverse=True
     )
+    env = Environment(loader=FileSystemLoader(TEMPLATE_PATH))
+    template = env.get_template(INDEX_TEMPLATE_FILE)
+    output_html = template.render(files=files)
     with open(os.path.join(directory, 'index.html'), 'w', encoding='utf-8') as f:
-        f.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rotary Summaries Index</title></head><body>\n')
-        f.write('<h1>Rotary Daily Summaries</h1>\n<ul>\n')
-        for file in files:
-            date_str = file.replace('.html', '')
-            f.write(f'<li><a href="{file}">{date_str}</a></li>\n')
-        f.write('</ul>\n</body></html>')
+        f.write(output_html)
     print("Exported today's index.html to exports/index.html")
 
 if __name__ == "__main__":
