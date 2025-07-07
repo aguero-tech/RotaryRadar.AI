@@ -7,7 +7,8 @@ import os
 import time
 import openai
 import yaml
-from app.day_url_limit import filter_urls_last_7_days  # adjust import as needed
+from datetime import datetime
+from app.day_url_limit import filter_urls_last_1_day
 
 #to use OpenAI's GPT-4.1 model for analysis; prompt engineering to get relevant suggestions
 def analyze_with_gpt(content):
@@ -27,7 +28,11 @@ def analyze_with_gpt(content):
 def load_urls(yaml_path="sources.yaml"):
     with open(yaml_path, "r") as f:
         data = yaml.safe_load(f)
-    return data.get("urls", []), data.get("full_story_depth1", [])
+    urls = data.get("urls", [])
+    today_str = datetime.today().strftime("%Y%m%d")
+    # Replace 'TODAY' with today's date in all URLs
+    urls = [url.replace("TODAY", today_str) for url in urls]
+    return urls, data.get("full_story_depth1", [])
 
 def scrape_depth1(driver, base_url):
     print(f"Scraping {base_url} for 'Full Story' links...")
@@ -36,13 +41,13 @@ def scrape_depth1(driver, base_url):
     full_story_links = driver.find_elements(By.LINK_TEXT, "Full Story")
     links = [link.get_attribute('href') for link in full_story_links]
 
-    # Filter links to only those within the last 7 days
-    recent_links = filter_urls_last_7_days(links)
+    # Filter links to only those within the last 1 day
+    recent_links = filter_urls_last_1_day(links)
     if not recent_links:
-        print(f"No URLs with dates in the last 7 days for {base_url}")
+        print(f"No URLs with dates in the last 1 day for {base_url}")
         return
 
-    print(f"Found {len(recent_links)} 'Full Story' links from the last 7 days for {base_url}")
+    print(f"Found {len(recent_links)} 'Full Story' links from the last 1 day for {base_url}")
     for link in recent_links:
         try:
             driver.get(link)

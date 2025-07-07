@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Opportunities</title>
     <style>
         body {
@@ -35,6 +36,7 @@
     </style>
 </head>
 <body>
+    <a href="https://gurnee-rotary.s3.amazonaws.com/index.html" style="font-size:1.1em;display:inline-block;margin-bottom:20px;">⬅️ Back to Index</a>
     <h1>Opportunities</h1>
 
     {% for row in rows %}
@@ -50,6 +52,10 @@
             {% if row.get('gpt_suggestion_html') %}
                 <div class="gpt_suggestion">
                     {{ row['gpt_suggestion_html'] | safe }}
+                </div>
+            {% elif row.get('gpt_suggestion') %}
+                <div class="gpt_suggestion">
+                    {{ row['gpt_suggestion'] }}
                 </div>
             {% endif %}
         </div>
