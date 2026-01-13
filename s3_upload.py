@@ -123,6 +123,19 @@ def generate_daily_html(date_str, articles):
         .back-link:hover {{
             text-decoration: underline;
         }}
+        .credit {{
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }}
+        .credit a {{
+            color: #3498db;
+            text-decoration: none;
+        }}
+        .credit a:hover {{
+            text-decoration: underline;
+        }}
         .count {{
             color: #7f8c8d;
             font-size: 0.9em;
@@ -131,6 +144,9 @@ def generate_daily_html(date_str, articles):
 </head>
 <body>
     <a href="index.html" class="back-link">← Back to Index</a>
+    <div class="credit">
+        <p>Powered by <a href="https://www.aguero.tech" target="_blank">aguero.tech</a></p>
+    </div>
     <h1>Rotary Radar - {date_str}</h1>
     <p class="count">Found {len(articles)} articles</p>
 """
