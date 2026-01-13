@@ -35,3 +35,4 @@ env/
 *.tmp
 venv/
 .env/
+rotary.db
