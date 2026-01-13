@@ -1,6 +1,6 @@
 urls:
-#daily herald
-  - "https://www.dailyherald.com/archive/20250618/"
+#daily herald - {TODAY} will be replaced with today's date (YYYYMMDD)
+  - "https://www.dailyherald.com/archive/{TODAY}/"
 
 
 #chicago tribune - lake county

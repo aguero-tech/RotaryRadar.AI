@@ -30,3 +30,12 @@ def update_analysis(article_id, is_opportunity, gpt_suggestion):
               (is_opportunity, gpt_suggestion, article_id))
     conn.commit()
     conn.close()
+
+def get_articles_by_date(date_str):
+    """Get all articles for a specific date (format: YYYY-MM-DD)"""
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    rows = c.execute("SELECT * FROM content WHERE scan_date = ?", (date_str,)).fetchall()
+    columns = [desc[0] for desc in c.description]
+    conn.close()
+    return [dict(zip(columns, row)) for row in rows]

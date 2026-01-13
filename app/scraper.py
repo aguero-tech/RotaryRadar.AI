@@ -7,6 +7,7 @@ import os
 import time
 import openai
 import yaml
+from datetime import datetime
 from app.day_url_limit import filter_urls_last_7_days  # adjust import as needed
 
 #to use OpenAI's GPT-4.1 model for analysis; prompt engineering to get relevant suggestions
@@ -87,6 +88,10 @@ def scrape_sources():
 
     # Normal scanning logic for URLs under 'urls:'
     for url in urls:
+        # Replace {TODAY} placeholder with today's date in YYYYMMDD format
+        today_date = datetime.now().strftime('%Y%m%d')
+        url = url.replace('{TODAY}', today_date)
+        
         print(f"Running normal scraping for {url} ...")
         try:
             driver.get(url)
